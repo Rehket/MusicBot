@@ -24,9 +24,12 @@ class Yikes:
 
                     data = dedent("".join(frameinfo.code_context))
                     if data.strip() == until:
-                        raise StopIteration
+                        return
+                    try:
+                        yield frameinfo.filename, frameinfo.lineno, data.strip()
+                    except StopIteration:
+                        return
 
-                    yield frameinfo.filename, frameinfo.lineno, data.strip()
                     del data
                 finally:
                     del frameinfo
